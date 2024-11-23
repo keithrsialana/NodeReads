@@ -1,9 +1,6 @@
 import type { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
-import dotenv from 'dotenv';
-dotenv.config();
-
 interface JwtPayload {
   _id: unknown;
   username: string;
@@ -35,7 +32,13 @@ export const signToken = (username: string, email: string, _id: unknown) => {
   const payload = { username, email, _id };
   const secretKey = process.env.JWT_SECRET_KEY || '';
 
-  return jwt.sign(payload, secretKey, { expiresIn: '1h' });
+  try {
+    return jwt.sign(payload, secretKey, { expiresIn: '1h' });
+  } catch (error) {
+    console.log(`Token error: SK(${secretKey}):`, error)
+    return null;
+
+  }
 };
 
 // GraphQL specific middleware

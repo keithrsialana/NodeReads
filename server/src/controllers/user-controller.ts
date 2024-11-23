@@ -25,8 +25,19 @@ export const createUser = async (req: Request, res: Response) => {
     return res.status(400).json({ message: 'Something is wrong!' });
   }
   const token = signToken(user.username, user.password, user._id);
-  return res.json({ token, user });
+  return res.json({ token, username: user.username });
 };
+
+export const deleteUser = async (req: Request, res: Response) => {
+  try {
+    const user = await User.deleteOne({username: req.body.username});
+    if (!user)
+      return res.status(400).json({ message: 'Cannot find a user with this id!'});
+    return res.json({ message: 'User deleted' });
+  } catch (error) {
+    return res.status(500).json({ message: 'Something went wrong with trying to delete the user' });
+  }
+}
 
 // login a user, sign a token, and send it back (to client/src/components/LoginForm.js)
 // {body} is destructured req.body

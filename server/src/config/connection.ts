@@ -1,7 +1,13 @@
 import dotenv from 'dotenv';
-dotenv.config();
-
+import path from 'path';
 import mongoose from 'mongoose';
+import { fileURLToPath } from 'node:url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const envPath = path.join(__dirname, '../../.env');
+dotenv.config({path: envPath});
 
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/nodereads';
 

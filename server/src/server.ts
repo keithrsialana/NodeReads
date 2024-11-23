@@ -26,19 +26,15 @@ const startApolloServer = async () => {
 	app.use(express.json());
 	app.use("/graphql", expressMiddleware(server));
 
-	const __filename = fileURLToPath(import.meta.url); // Get the current module's file path
-const __dirname = path.dirname(__filename); // Get the directory name from the file path
+	const __filename = fileURLToPath(import.meta.url);
+	const __dirname = path.dirname(__filename);
 
 	// Serve static files from the React app
-	app.use(express.static(path.join(__dirname, "../../client/dist"))); // Adjust path as necessary
-
-	// The "catchall" handler: for any request that doesn't match one above, send back React's index.html file.
+	app.use(express.static(path.join(__dirname, "../../client/dist")));
+	app.use(routes);
 	app.get("*", (_req, res) => {
 		res.sendFile(path.join(__dirname, "../../client/dist/index.html"));
 	});
-
-	app.use(routes);
-
 	app.listen(PORT, () => {
 		console.log(`API server running on port ${PORT}!`);
 		console.log(`Use GraphQL at http://localhost:${PORT}/graphql`);
