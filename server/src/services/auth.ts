@@ -27,7 +27,7 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
       return next();
     });
   } else {
-    res.sendStatus(401); // Unauthorized
+    res.sendStatus(401).json({ message: 'Unauthorized' }); // Unauthorized
   }
 };
 
@@ -36,4 +36,21 @@ export const signToken = (username: string, email: string, _id: unknown) => {
   const secretKey = process.env.JWT_SECRET_KEY || '';
 
   return jwt.sign(payload, secretKey, { expiresIn: '1h' });
+};
+
+// GraphQL specific middleware
+export const contextMiddleware = (req:Request) => {
+  const authHeader = req.headers.authorization;
+  if (authHeader) {
+    const token = authHeader.split(' ')[1];
+    const secretKey = process.env.JWT_SECRET_KEY || '';
+
+    try {
+      const user = jwt.verify(token, secretKey) as JwtPayload;
+      return { user }; // Add user to context
+    } catch (err) {
+      throw new Error('Authentication token is invalid or expired.');
+    }
+  }
+  return {};
 };
