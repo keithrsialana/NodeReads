@@ -1,4 +1,3 @@
-
 # NodeReads
 
 ![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)
@@ -19,8 +18,7 @@ It allows users to search for books, save searches, and manage reading preferenc
 Built on the MERN stack, it replaces traditional RESTful APIs with a modern GraphQL solution.
 
 ## Purpose
-NodeReads modernizes the application architecture using GraphQL for efficient data querying and mutation. 
-It showcases advanced technologies like Apollo Server and MongoDB Atlas while ensuring secure user authentication.
+NodeReads modernizes the application architecture by replacing traditional MongoDB implementation with GraphQL for efficient data querying and mutation.
 
 ## Installation Instructions
 1. Clone the repository: `git clone https://github.com/keithrsialana/nodereads.git`
@@ -46,21 +44,17 @@ It showcases advanced technologies like Apollo Server and MongoDB Atlas while en
 3. Use the search bar to find books using the Google Books API and save them to your account.
 
 ## Technologies Used
-- **MongoDB**: Database for storing user data and saved books.
 - **Express.js**: Backend framework for building the server.
 - **React**: Front-end library for building the user interface.
 - **Node.js**: JavaScript runtime for the server-side logic.
 - **Apollo Server**: Implementation of a GraphQL server for efficient API communication.
 - **GraphQL**: Query language for API calls.
-- **MongoDB Atlas**: Cloud-hosted MongoDB service.
-- **Render**: Cloud platform for application deployment.
 
 ## Features
 - Search for books using the Google Books API.
 - Save book searches to a personal account.
 - Refactored backend architecture using GraphQL.
 - Secure user authentication.
-- Deployed to the cloud with MongoDB Atlas and Render.
 
 ## License
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
