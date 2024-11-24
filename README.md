@@ -28,18 +28,19 @@ NodeReads modernizes the application architecture by replacing traditional Mongo
    npm i
    npm run install
    npm run build
-   npm run seed
    ```
 4. Set up your `.env` file with the necessary configurations (MongoDB URI, API keys, etc.).
+This is an example of what the `.env` file should look like
+```
+MONGODB_URI=mongodb://127.0.0.1:27017/nodereads
+JWT_SECRET_KEY=thisisasecret!
+```
 
 ## Usage Instructions
-1. Start the development servers:
-   ```bash
-   cd server
-   npm run start
-   cd ../client
-   npm run start
-   ```
+1. Start the dist files with the following command:
+```
+npm run start
+```
 2. Access the application in your browser at `http://localhost:3000`.
 3. Use the search bar to find books using the Google Books API and save them to your account.
 
@@ -49,6 +50,10 @@ NodeReads modernizes the application architecture by replacing traditional Mongo
 - **Node.js**: JavaScript runtime for the server-side logic.
 - **Apollo Server**: Implementation of a GraphQL server for efficient API communication.
 - **GraphQL**: Query language for API calls.
+- **MongoDB**: NoSQL database for storing user data and book information.
+- **Mongoose**: MongoDB ORM for interacting with the database
+- **Google Books API**: API for searching and retrieving book information.
+- **JWT**: JSON Web Tokens for authentication and authorization.
 
 ## Features
 - Search for books using the Google Books API.
