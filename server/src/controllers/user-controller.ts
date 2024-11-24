@@ -19,13 +19,18 @@ export const getSingleUser = async (req: Request, res: Response) => {
 
 // create a user, sign a token, and send it back (to client/src/components/SignUpForm.js)
 export const createUser = async (req: Request, res: Response) => {
-  const user = await User.create(req.body);
-
-  if (!user) {
-    return res.status(400).json({ message: 'Something is wrong!' });
+  try {
+    const user = await User.create(req.body);
+    if (!user) {
+      console.log('User created!');
+    }
+    
+    const token = signToken(user.username, user.password, user._id);
+    return res.json({ token, username: user.username });
+  } catch (error) {
+    return res.status(400).json({ message: 'User already exists!' });
   }
-  const token = signToken(user.username, user.password, user._id);
-  return res.json({ token, username: user.username });
+  
 };
 
 export const deleteUser = async (req: Request, res: Response) => {
