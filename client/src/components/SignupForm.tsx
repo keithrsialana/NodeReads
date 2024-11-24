@@ -1,13 +1,16 @@
 import { useState } from 'react';
 import type { ChangeEvent, FormEvent } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
+import { ADD_USER } from '../utils/mutations';
 
-import { createUser } from '../utils/API';
+
 import Auth from '../utils/auth';
 import type { User } from '../models/User';
+import { useMutation } from '@apollo/client';
 
 // biome-ignore lint/correctness/noEmptyPattern: <explanation>
 const SignupForm = ({}: { handleModalClose: () => void }) => {
+  const [addUser] = useMutation(ADD_USER);
   const [errmsg, setErrmsg] = useState('');
   // set initial form state
   const [userFormData, setUserFormData] = useState<User>({ username: '', email: '', password: '', savedBooks: [] });
@@ -24,36 +27,29 @@ const SignupForm = ({}: { handleModalClose: () => void }) => {
   const handleFormSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setErrmsg('');
-
-    // check if form has everything (as per react-bootstrap docs)
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
+        event.preventDefault();
+        event.stopPropagation();
     }
 
     try {
-      const response = await createUser(userFormData);
-
-      if (!response.ok) {
-        throw new Error('something went wrong!');
-      }
-
-      const { token } = await response.json();
-      Auth.login(token);
+        const { data } = await addUser ({ variables: { input: userFormData } });
+        const { token } = data.addUser ; // Access the token from the response
+        Auth.login(token); // Log the user in using the token
     } catch (err) {
-      console.error(err);
-      setErrmsg('User already exists');
-      setShowAlert(true);
+        console.error(err);
+        setErrmsg('User already exists');
+        setShowAlert(true);
     }
 
     setUserFormData({
-      username: '',
-      email: '',
-      password: '',
-      savedBooks: [],
+        username: '',
+        email: '',
+        password: '',
+        savedBooks: [],
     });
-  };
+};
 
   return (
     <>
