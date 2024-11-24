@@ -3,6 +3,7 @@ import db from "./config/connection.js";
 import routes from "./routes/index.js";
 import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@apollo/server/express4";
+import cors from "cors";
 
 // Import the two parts of a GraphQL schema
 import { typeDefs, resolvers } from "./schemas/index.js";
@@ -12,12 +13,18 @@ import { fileURLToPath } from "node:url";
 const PORT = process.env.PORT || 3001;
 const app = express();
 
+app.use(cors({
+	origin: "http://localhost:3000",
+	credentials: true
+}));
+
+app.options('*', cors());
+
 const server = new ApolloServer({
 	typeDefs,
 	resolvers,
 });
 
-// Create a new instance of an Apollo server with the GraphQL schema
 const startApolloServer = async () => {
 	await server.start();
 	await db();
