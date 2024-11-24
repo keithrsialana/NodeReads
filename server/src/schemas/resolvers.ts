@@ -11,7 +11,7 @@ interface ProfileArgs {
 }
 
 interface AddUserArgs{
-	userObj: {
+	input: {
 		username:string;
 		email: string;
 		password: string;
@@ -62,8 +62,8 @@ const resolvers = {
 		},
 
 		// Resolver for the 'addUser ' mutation
-		addUser: async (_parent: any, { userObj }: AddUserArgs) => {
-			const user = await User.create(userObj);
+		addUser: async (_parent: any, { input }: AddUserArgs) => {
+			const user = await User.create(input);
 			const token = signToken(user.username, user.email, user._id);
 			return { token, user };
 		},
