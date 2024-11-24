@@ -91,7 +91,6 @@ const resolvers = {
 		removeBook: async (_parent: any, { bookId, username }: RemoveBookArgs) => {
 			// Find the user by username
 			const user = await User.findOne({ username });
-		
 			if (!user) {
 				throw new Error("User not found!"); // Handle the case where the user does not exist
 			}

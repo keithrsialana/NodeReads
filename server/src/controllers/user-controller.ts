@@ -22,7 +22,7 @@ export const createUser = async (req: Request, res: Response) => {
   try {
     const user = await User.create(req.body);
     if (!user) {
-      console.log('User created!');
+      console.log('Error in creating user');
     }
     
     const token = signToken(user.username, user.password, user._id);
