@@ -5,7 +5,7 @@ import { ADD_USER } from '../utils/mutations';
 
 
 import Auth from '../utils/auth';
-import type { User } from '../models/User';
+import type { AddUserInput } from '../models/User';
 import { useMutation } from '@apollo/client';
 
 // biome-ignore lint/correctness/noEmptyPattern: <explanation>
@@ -13,7 +13,7 @@ const SignupForm = ({}: { handleModalClose: () => void }) => {
   const [addUser] = useMutation(ADD_USER);
   const [errmsg, setErrmsg] = useState('');
   // set initial form state
-  const [userFormData, setUserFormData] = useState<User>({ username: '', email: '', password: '', savedBooks: [] });
+  const [userFormData, setUserFormData] = useState<AddUserInput>({ username: '', email: '', password: '' });
   // set state for form validation
   const [validated] = useState(false);
   // set state for alert
@@ -46,8 +46,7 @@ const SignupForm = ({}: { handleModalClose: () => void }) => {
     setUserFormData({
         username: '',
         email: '',
-        password: '',
-        savedBooks: [],
+        password: ''
     });
 };
 

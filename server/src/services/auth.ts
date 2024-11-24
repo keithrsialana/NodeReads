@@ -35,7 +35,6 @@ export const signToken = (username: string, email: string, _id: unknown) => {
   try {
     return jwt.sign(payload, secretKey, { expiresIn: '1h' });
   } catch (error) {
-    console.log(`Token error: SK(${secretKey}):`, error)
     return null;
 
   }

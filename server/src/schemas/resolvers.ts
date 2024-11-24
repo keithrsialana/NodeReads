@@ -4,9 +4,6 @@ import { signToken } from "../services/auth.js";
 const resolvers = {
 	Query: {
 		me: async (_parent: any, _args: any, { user }: any) => {
-			if (!user) {
-				throw new Error("You are not logged in.");
-			}
 			return await User.findById(user._id);
 		},
 	},
@@ -35,32 +32,45 @@ const resolvers = {
 		},
 
 		// Resolver for the 'saveBook' mutation
-		saveBook: async (_: any, { input }: any, { user }: any) => {
+		saveBook: async (_: any, { input }: any) => {
+			// Find the user by username
+			const user = await User.findOne({ username: input.username });
+
 			if (!user) {
-				throw new Error("You need to be logged in!");
+				throw new Error("User not found!"); // Handle the case where the user does not exist
 			}
-			const updatedUser = await User.findOneAndUpdate(
+		
+			// Add the book to the user's savedBooks
+			const updatedUser  = await User.findOneAndUpdate(
 				{ _id: user._id },
-				{ $addToSet: { savedBooks: input } },
+				{ $addToSet: { savedBooks: input } }, // Save the book to the user's savedBooks
 				{ new: true, runValidators: true }
 			);
-			return updatedUser;
+		
+			return updatedUser ;
 		},
 
 		// Resolver for the 'removeBook' mutation
-		removeBook: async (_: any, { bookId }: any, { user }: any) => {
+		removeBook: async (_: any, { bookId, username }: any) => {
+			// Find the user by username
+			const user = await User.findOne({ username });
+		
 			if (!user) {
-				throw new Error("You need to be logged in!");
+				throw new Error("User not found!"); // Handle the case where the user does not exist
 			}
-			const updatedUser = await User.findOneAndUpdate(
+		
+			// Remove the book from the user's savedBooks
+			const updatedUser  = await User.findOneAndUpdate(
 				{ _id: user._id },
-				{ $pull: { savedBooks: { bookId } } },
+				{ $pull: { savedBooks: { bookId } } }, // Remove the book by bookId
 				{ new: true }
 			);
-			if (!updatedUser) {
+		
+			if (!updatedUser ) {
 				throw new Error("Couldn't find user with this id!");
 			}
-			return updatedUser;
+		
+			return updatedUser ;
 		},
 	},
 };

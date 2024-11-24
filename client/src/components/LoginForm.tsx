@@ -4,7 +4,6 @@ import type { ChangeEvent, FormEvent } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
 import { LOGIN_USER } from '../utils/mutations';
 
-import { loginUser } from '../utils/API';
 import Auth from '../utils/auth';
 import type { User } from '../models/User';
 import { useMutation } from '@apollo/client';
@@ -24,7 +23,7 @@ const LoginForm = ({}: { handleModalClose: () => void }) => {
   const handleFormSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    // check if form has everything (as per react-bootstrap docs)
+    // Check if form has everything (as per react-bootstrap docs)
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
       event.preventDefault();
@@ -32,26 +31,29 @@ const LoginForm = ({}: { handleModalClose: () => void }) => {
     }
 
     try {
-      const response = await loginUser(userFormData);
+      // Call the login mutation with variables
+      const { data } = await login({ variables: { email: userFormData.email, password: userFormData.password } });
 
-      if (!response.ok) {
+      // Check if data is returned and handle the token
+      if (data && data.login) {
+        const { token } = data.login;
+        Auth.login(token); // Log the user in using the token
+      } else {
         throw new Error('something went wrong!');
       }
-
-      const { token } = await response.json();
-      Auth.login(token);
     } catch (err) {
       console.error(err);
       setShowAlert(true);
     }
 
+    // Reset form data
     setUserFormData({
       username: '',
       email: '',
       password: '',
       savedBooks: [],
     });
-  };
+};
 
   return (
     <>

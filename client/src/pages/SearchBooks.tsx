@@ -17,6 +17,7 @@ import { saveBookIds, getSavedBookIds } from '../utils/localStorage';
 import type { Book } from '../models/Book';
 import type { GoogleAPIBook } from '../models/GoogleAPIBook';
 import { useMutation } from '@apollo/client';
+import { JwtPayload } from 'jwt-decode';
 
 const SearchBooks = () => {
   const [saveBook] = useMutation(SAVE_BOOK);
@@ -66,6 +67,8 @@ const SearchBooks = () => {
     }
   };
 
+  // TODO: saveBook needs a 'user' object with id to be able to modify a user in the database
+  // figure out a way to grab the user id from somewhere and pass it into the mutation
   // create function to handle saving a book to our database
   const handleSaveBook = async (bookId: string) => {
     // find the book in `searchedBooks` state by the matching id
@@ -79,8 +82,21 @@ const SearchBooks = () => {
     }
 
     try {
+      const profile:any = Auth.getProfile() as JwtPayload;
+      const username = profile.username;
+
+      const input = {
+        bookId: bookToSave.bookId,
+        authors: bookToSave.authors,
+        description: bookToSave.description,
+        title: bookToSave.title,
+        image: bookToSave.image,
+        link: bookToSave.link,
+        username: username,
+    };
+
       const { data } = await saveBook({
-        variables: { input: bookToSave },
+        variables: { input },
       });
 
       if (data) {
