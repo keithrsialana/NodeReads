@@ -67,8 +67,6 @@ const SearchBooks = () => {
     }
   };
 
-  // TODO: saveBook needs a 'user' object with id to be able to modify a user in the database
-  // figure out a way to grab the user id from somewhere and pass it into the mutation
   // create function to handle saving a book to our database
   const handleSaveBook = async (bookId: string) => {
     // find the book in `searchedBooks` state by the matching id

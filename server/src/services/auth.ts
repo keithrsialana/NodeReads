@@ -39,20 +39,3 @@ export const signToken = (username: string, email: string, _id: unknown) => {
 
   }
 };
-
-// GraphQL specific middleware
-export const contextMiddleware = (req:Request) => {
-  const authHeader = req.headers.authorization;
-  if (authHeader) {
-    const token = authHeader.split(' ')[1];
-    const secretKey = process.env.JWT_SECRET_KEY || '';
-
-    try {
-      const user = jwt.verify(token, secretKey) as JwtPayload;
-      return { user }; // Add user to context
-    } catch (err) {
-      throw new Error('Authentication token is invalid or expired.');
-    }
-  }
-  return {};
-};

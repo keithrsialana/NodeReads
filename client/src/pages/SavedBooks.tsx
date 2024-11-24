@@ -7,9 +7,16 @@ import type { User } from '../models/User';
 import { useQuery, useMutation } from '@apollo/client';
 import { GET_ME } from '../utils/queries';
 import { REMOVE_BOOK } from '../utils/mutations';
+import { JwtPayload } from 'jwt-decode';
 
 const SavedBooks = () => {
-  const { loading, data } = useQuery(GET_ME);
+  const profile:any = Auth.loggedIn() ? Auth.getProfile() as JwtPayload : null;
+  const userId = profile ? profile._id : null;
+
+  const { loading, data } = useQuery(GET_ME, {
+    variables: {profileId: userId},
+    skip: !userId,
+  });
   const [removeBook] = useMutation(REMOVE_BOOK);
 
   const userData: User = data?.me || {
@@ -27,12 +34,15 @@ const SavedBooks = () => {
     }
   
     try {
+      const profile:any = Auth.getProfile() as JwtPayload;
+      const username = profile.username;
+      
       // Execute the removeBook mutation
       await removeBook({
-        variables: { bookId },
+        variables: { bookId, username },
       });
 
-      removeBookId(bookId); // Keep this function in place
+      removeBookId(bookId);
     } catch (err) {
       console.error(err);
     }
